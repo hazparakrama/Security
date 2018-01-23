@@ -104,5 +104,10 @@ namespace Microsoft.AspNetCore.Authentication.OAuth
         /// Gets or sets the type used to secure data handled by the middleware.
         /// </summary>
         public ISecureDataFormat<AuthenticationProperties> StateDataFormat { get; set; }
+
+        /// <summary>
+        /// If this is null or empty, the OAuth library will build the RedirectUri based on the current HttpContext.
+        /// </summary>
+        public string RedirectUri { get; set; }
     }
 }

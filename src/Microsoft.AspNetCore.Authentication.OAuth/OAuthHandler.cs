@@ -86,7 +86,12 @@ namespace Microsoft.AspNetCore.Authentication.OAuth
                 return HandleRequestResult.Fail("Code was not found.");
             }
 
-            var tokens = await ExchangeCodeAsync(code, BuildRedirectUri(Options.CallbackPath));
+            var redirectUri = BuildRedirectUri(Options.CallbackPath);
+            if(string.IsNullOrEmpty(Options.RedirectUri))
+            {
+                redirectUri = Options.RedirectUri;
+            }
+            var tokens = await ExchangeCodeAsync(code, redirectUri);
 
             if (tokens.Error != null)
             {
@@ -200,7 +205,12 @@ namespace Microsoft.AspNetCore.Authentication.OAuth
             // OAuth2 10.12 CSRF
             GenerateCorrelationId(properties);
 
-            var authorizationEndpoint = BuildChallengeUrl(properties, BuildRedirectUri(Options.CallbackPath));
+            var redirectUri = BuildRedirectUri(Options.CallbackPath);
+            if (string.IsNullOrEmpty(Options.RedirectUri))
+            {
+                redirectUri = Options.RedirectUri;
+            }
+            var authorizationEndpoint = BuildChallengeUrl(properties, redirectUri);
             var redirectContext = new RedirectContext<OAuthOptions>(
                 Context, Scheme, Options,
                 properties, authorizationEndpoint);
